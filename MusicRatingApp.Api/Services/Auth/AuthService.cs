@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using MusicRatingApp.Api.Data;
 using MusicRatingApp.Api.Models.Database;
 
-namespace MusicRatingApp.Api.Services.Token;
+namespace MusicRatingApp.Api.Services.Auth;
 
 public class AuthService : IAuthService
 {
@@ -44,10 +44,10 @@ public class AuthService : IAuthService
         
         await _dbContext.SaveChangesAsync();
 
-        return (createJwtTokenResponse.token, refreshToken.Token);
+        return (createJwtTokenResponse, refreshToken.Token);
     }
 
-    public (string token, DateTime expires) CreateJwtToken(int userId)
+    public string CreateJwtToken(int userId)
     {
         var expiresAt = DateTime.Now.AddHours(1);
 
@@ -58,7 +58,7 @@ public class AuthService : IAuthService
 
         var jwtSigningKey = _configuration["Variables:JwtSigningKey"] ??
                             throw new InvalidOperationException("JwtSigningKey not found in appsettings.json");
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSigningKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var issuer = _configuration["Variables:JwtIssuer"];
 
@@ -70,7 +70,7 @@ public class AuthService : IAuthService
         );
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-        return (jwt, expiresAt);
+        return jwt;
     }
 
     public RefreshToken CreateRefreshToken(int userId)

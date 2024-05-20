@@ -2,20 +2,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MusicRatingApp.Api.Services.Token;
+using MusicRatingApp.Api.Services.Auth;
 
 namespace MusicRatingApp.Api.Extensions.Program;
 
 public static class ProgramAuthExtensions
 {
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void AddJwtAuthentication(this WebApplicationBuilder builder)
     {
-        var key = Encoding.ASCII.GetBytes(configuration["Variables:JwtSigningKey"] ??
-                                          throw new InvalidOperationException(
-                                              "JwtSigningKey is not set in appsettings.json"));
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["Variables:JwtSigningKey"] ??
+                                         throw new InvalidOperationException(
+                                             "JwtSigningKey is not set in appsettings.json"));
 
-        services.AddAuthentication(options =>
+        builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,7 +28,7 @@ public static class ProgramAuthExtensions
                     ValidateAudience = false,
                     ValidateLifetime = false, // Lifetime is validated in OnTokenValidated
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Variables:JwtIssuer"] ??
+                    ValidIssuer = builder.Configuration["Variables:JwtIssuer"] ??
                                   throw new InvalidOperationException("JwtIssuer is not set in appsettings.json"),
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ClockSkew = TimeSpan.FromSeconds(5)
@@ -94,7 +93,6 @@ public static class ProgramAuthExtensions
                     }
                 };
             });
-
-        return services;
+        builder.Services.AddAuthorization();
     }
 }

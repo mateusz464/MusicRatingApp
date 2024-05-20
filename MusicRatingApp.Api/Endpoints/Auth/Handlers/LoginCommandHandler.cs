@@ -1,10 +1,10 @@
 using LanguageExt.Common;
 using Mediator;
 using MusicRatingApp.Api.Endpoints.Auth.Commands;
-using MusicRatingApp.Api.Services.Token;
-using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
 using MusicRatingApp.Api.Data;
+using MusicRatingApp.Api.Endpoints.Auth.Responses;
+using MusicRatingApp.Api.Services.Auth;
 
 namespace MusicRatingApp.Api.Endpoints.Auth.Handlers;
 
@@ -45,7 +45,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
         
         return new Result<LoginResponse>(new LoginResponse
         {
-            JwtToken = jwtToken.token,
+            JwtToken = jwtToken,
             RefreshToken = refreshToken.Token
         });
     }
