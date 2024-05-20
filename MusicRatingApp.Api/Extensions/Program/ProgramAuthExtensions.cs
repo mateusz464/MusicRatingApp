@@ -50,7 +50,7 @@ public static class ProgramAuthExtensions
                     OnTokenValidated = async context =>
                     {
                         var tokenHandler = new JwtSecurityTokenHandler();
-                        var jwtToken = tokenHandler.ReadToken(context.SecurityToken.ToString()) as JwtSecurityToken;
+                        var jwtToken = tokenHandler.ReadToken(context.SecurityToken.UnsafeToString()) as JwtSecurityToken;
                         var expiration = jwtToken?.ValidTo;
 
                         if (!expiration.HasValue)
