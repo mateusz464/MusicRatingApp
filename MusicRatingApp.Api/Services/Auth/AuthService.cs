@@ -19,8 +19,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public async Task<(string JwtToken, string RefreshToken)?> GenerateNewTokensAsync(JwtSecurityToken token,
-        string oldRefreshTokenString)
+    public async Task<(string JwtToken, string RefreshToken)?> GenerateNewTokensAsync(string oldRefreshTokenString)
     {
         var oldRefreshToken = await _dbContext.RefreshTokens
             .FirstOrDefaultAsync(t => t.Token == oldRefreshTokenString);

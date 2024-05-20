@@ -50,16 +50,10 @@ public static class ProgramAuthExtensions
                     OnTokenValidated = async context =>
                     {
                         var tokenHandler = new JwtSecurityTokenHandler();
-                        var jwtToken = tokenHandler.ReadToken(context.SecurityToken.UnsafeToString()) as JwtSecurityToken;
-                        var expiration = jwtToken?.ValidTo;
+                        var securityToken = context.SecurityToken;
+                        
 
-                        if (!expiration.HasValue)
-                        {
-                            context.Fail("Token has no expiration date.");
-                            return;
-                        }
-
-                        if (expiration.Value >= DateTime.UtcNow) // Token is valid
+                        if (securityToken.ValidTo >= DateTime.UtcNow) // Token is valid
                         {
                             return;
                         }
@@ -70,7 +64,7 @@ public static class ProgramAuthExtensions
                             var tokenService = context.HttpContext.RequestServices.GetRequiredService<IAuthService>();
 
                             var newTokens =
-                                await tokenService.GenerateNewTokensAsync(jwtToken!, refreshToken);
+                                await tokenService.GenerateNewTokensAsync(refreshToken);
 
                             if (newTokens is null)
                             {
