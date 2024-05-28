@@ -2,5 +2,5 @@
 
 public interface IEndpointGroup
 {
-    public void RouteGroup(RouteGroupBuilder driverGroup);
+    public void RouteGroup(RouteGroupBuilder endpointGroup);
 }

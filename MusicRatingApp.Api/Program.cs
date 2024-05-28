@@ -1,36 +1,56 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MusicRatingApp.Api.Data;
-using Serilog;
+using MusicRatingApp.Api.Endpoints;
+using MusicRatingApp.Api.Extensions.Program;
+using MusicRatingApp.Api.Services.Auth;
+
+#region Builder
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Extension methods
+builder.AddJwtAuthentication();
+builder.AddSerilog();
+builder.Services.AddSwagger();
 
-var logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddHttpContextAccessor();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
-builder.Services.AddLogging(b => b.AddConsole());
-
+// DbContext
 var connectionString = builder.Configuration["Variables:ConnectionString"];
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Add Mediator
+builder.Services.AddMediator(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.Namespace = "MusicRatingApp.Api";
+    options.ServiceLifetime = ServiceLifetime.Transient;
+});
 
+#endregion
+
+#region Services
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+#endregion
+
+#region App
+
+var app = builder.Build();
+app.AddSwaggerInDevelopment();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.RegisterEndpoints();
+
+app.MapGet("/authed", () => "Hello mr authed user")
+    .RequireAuthorization();
+
 app.Run();
+
+#endregion
