@@ -3,7 +3,7 @@ using MusicRatingApp.Api.Endpoints.Auth.Commands;
 
 namespace MusicRatingApp.Api.Endpoints.Auth.Validators;
 
-public class LoginCommandValidator : AbstractValidator<LoginCommand>
+public class LoginCommandValidator : AbstractValidator<LoginRequest>
 {
     public LoginCommandValidator()
     {

@@ -27,11 +27,17 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="SpotifyAPI.Web" Version="7.1.1" />
+        <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.1.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="System.Text.Json" Version="8.0.3" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Endpoints\Spotify\Requests\" />
+      <Folder Include="Endpoints\Spotify\Handlers\" />
+      <Folder Include="Endpoints\Spotify\Responses\" />
+      <Folder Include="Endpoints\Spotify\Validators\" />
       <Folder Include="Utilities\" />
     </ItemGroup>
 

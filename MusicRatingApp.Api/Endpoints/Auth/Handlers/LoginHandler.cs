@@ -8,18 +8,18 @@ using MusicRatingApp.Api.Services.Auth;
 
 namespace MusicRatingApp.Api.Endpoints.Auth.Handlers;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
+public class LoginHandler : IRequestHandler<LoginRequest, Result<LoginResponse>>
 {
     private readonly IAuthService _authService;
     private readonly AppDbContext _dbContext;
 
-    public LoginCommandHandler(IAuthService authService, AppDbContext dbContext)
+    public LoginHandler(IAuthService authService, AppDbContext dbContext)
     {
         _authService = authService;
         _dbContext = dbContext;
     }
 
-    public async ValueTask<Result<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async ValueTask<Result<LoginResponse>> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
         var email = request.Email;
         var password = request.Password;

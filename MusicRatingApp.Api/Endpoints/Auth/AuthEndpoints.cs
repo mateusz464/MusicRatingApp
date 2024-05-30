@@ -10,15 +10,15 @@ public class AuthEndpoints : IEndpointGroup
         var authGroup = endpointGroup.MapGroup("/auth");
 
         authGroup.MapPost("/login", Login)
-            .AddEndpointFilter<ValidationFilter<LoginCommand>>()
+            .AddEndpointFilter<ValidationFilter<LoginRequest>>()
             .AllowAnonymous();
 
         authGroup.MapPost("/register", Register)
-            .AddEndpointFilter<ValidationFilter<RegisterCommand>>()
+            .AddEndpointFilter<ValidationFilter<RegisterRequest>>()
             .AllowAnonymous();
     }
 
-    private static async Task<IResult> Register(HttpContext httpContext, IMediator mediator, RegisterCommand request)
+    private static async Task<IResult> Register(HttpContext httpContext, IMediator mediator, RegisterRequest request)
     {
         var result = await mediator.Send(request);
         return result.Match(Succ: res =>
@@ -39,7 +39,7 @@ public class AuthEndpoints : IEndpointGroup
         }, Results.BadRequest);
     }
 
-    private static async Task<IResult> Login(HttpContext httpContext, IMediator mediator, LoginCommand request)
+    private static async Task<IResult> Login(HttpContext httpContext, IMediator mediator, LoginRequest request)
     {
         var result = await mediator.Send(request);
         return result.Match(Succ: res =>

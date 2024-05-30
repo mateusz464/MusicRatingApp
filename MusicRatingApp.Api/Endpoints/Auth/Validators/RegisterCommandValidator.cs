@@ -5,7 +5,7 @@ using MusicRatingApp.Api.Endpoints.Auth.Commands;
 
 namespace MusicRatingApp.Api.Endpoints.Auth.Validators;
 
-public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+public class RegisterCommandValidator : AbstractValidator<RegisterRequest>
 {
     private readonly AppDbContext _dbContext;
 
