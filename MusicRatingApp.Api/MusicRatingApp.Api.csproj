@@ -34,9 +34,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Endpoints\Spotify\Requests\" />
-      <Folder Include="Endpoints\Spotify\Handlers\" />
-      <Folder Include="Endpoints\Spotify\Responses\" />
       <Folder Include="Endpoints\Spotify\Validators\" />
       <Folder Include="Utilities\" />
     </ItemGroup>

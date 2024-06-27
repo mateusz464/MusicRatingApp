@@ -1,4 +1,3 @@
-using System.Data.Common;
 using LanguageExt.Common;
 using Mediator;
 using MusicRatingApp.Api.Data;

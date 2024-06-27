@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using MusicRatingApp.Api.Models.Database;
 
 namespace MusicRatingApp.Api.Services.Auth;

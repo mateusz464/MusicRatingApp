@@ -5,7 +5,6 @@ using MusicRatingApp.Api.Endpoints;
 using MusicRatingApp.Api.Extensions.Program;
 using MusicRatingApp.Api.Services.Auth;
 using MusicRatingApp.Api.Services.Spotify;
-using SpotifyAPI.Web;
 
 #region Builder
 
