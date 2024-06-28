@@ -17,6 +17,8 @@ public class SpotifyEndpoints : IEndpointGroup
     {
         var request = new GetTrackRequest { TrackId = trackId };
         var response = await mediator.Send(request);
-        return response.Match(Results.Ok, Results.BadRequest);
+        return response.Match(res => res.Track is not null
+            ? Results.Ok((object?)res.Track)
+            : Results.NotFound(), Results.BadRequest);
     }
 }
