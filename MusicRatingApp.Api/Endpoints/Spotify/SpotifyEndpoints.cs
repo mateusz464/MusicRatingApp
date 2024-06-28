@@ -12,6 +12,7 @@ public class SpotifyEndpoints : IEndpointGroup
 
         spotifyGroup.MapGet("/track/{trackId}", GetTrack);
         spotifyGroup.MapGet("/album/{albumId}", GetAlbum);
+        spotifyGroup.MapGet("/new-albums", GetNewAlbums);
     }
 
     private static async Task<IResult> GetTrack(HttpContext context, IMediator mediator, string trackId)
@@ -29,6 +30,15 @@ public class SpotifyEndpoints : IEndpointGroup
         var response = await mediator.Send(request);
         return response.Match(res => res.Album is not null
             ? Results.Ok((object?)res.Album)
+            : Results.NotFound(), Results.BadRequest);
+    }
+    
+    private static async Task<IResult> GetNewAlbums(HttpContext context, IMediator mediator)
+    {
+        var request = new GetNewAlbumsRequest();
+        var response = await mediator.Send(request);
+        return response.Match(res => res.NewAlbums is not null
+            ? Results.Ok((object?)res.NewAlbums)
             : Results.NotFound(), Results.BadRequest);
     }
 }
